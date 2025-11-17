@@ -1,18 +1,31 @@
+// Core DOM references
 const card = document.getElementById("flashcard");
 const term = card.querySelector(".term");
 const definition = card.querySelector(".definition");
+
 const checkButton = document.querySelector(".check");
 const nextButton = document.querySelector(".next");
 const restartButton = document.querySelector(".restart");
 const counterDisplay = document.getElementById("counter");
 const themeToggle = document.getElementById("theme-toggle");
 
-const categoryButtons = document.querySelectorAll(".category-btn");
-const categoryScreen = document.getElementById("category-screen");
+// Screens & navigation
+const landingScreen = document.getElementById("landing-screen");
+const languageScreen = document.getElementById("language-screen");
+const mathScreen = document.getElementById("math-screen");
 const studyScreen = document.getElementById("study-screen");
 
-// NEW: track which set is currently active
+const screens = document.querySelectorAll(".screen");
+const menuScreens = document.querySelectorAll(".menu-screen");
+const navLinks = document.querySelectorAll(".nav-link");
+const categoryButtons = document.querySelectorAll(".category-btn");
+
+const backButton = document.getElementById("back-to-categories");
+const addSubjectButton = document.getElementById("add-subject");
+
+// State
 let currentSetName = null;
+let lastMenuScreen = landingScreen;
 
 const HebrewAlphabet = [
   { term: "א", definition: "Alef: silent pronunciation" },
@@ -37,41 +50,43 @@ const HebrewAlphabet = [
   { term: "ר", definition: "Resh: r sound" },
   { term: "שׂ", definition: "Sin: s sound" },
   { term: "שׁ", definition: "Shin: sh sound" },
-  { term: "ת", definition: "Taw: t sound" },
+  { term: "ת", definition: "Taw: t sound" }
 ];
 
 const GeometryPostulates = [
   {
     term: "Postulate 1",
-    definition: "A straight line segment can be drawn joining any two points.",
+    definition: "A straight line segment can be drawn joining any two points."
   },
   {
     term: "Postulate 2",
-    definition:
-      "Any straight line segment can be extended indefinitely in a straight line.",
+    definition: "Any straight line segment can be extended indefinitely in a straight line."
   },
   {
     term: "Postulate 3",
     definition:
-      "Given any straight line segment, a circle can be drawn having the segment as radius and one endpoint as center.",
+      "Given any straight line segment, a circle can be drawn having the segment as radius and one endpoint as center."
   },
-  { term: "Postulate 4", definition: "All right angles are congruent." },
+  {
+    term: "Postulate 4",
+    definition: "All right angles are congruent."
+  },
   {
     term: "Postulate 5",
     definition:
-      "If a line segment intersec...t side on which the angles sum to less than two right angles.",
-  },
+      "If a line segment intersects two straight lines forming two interior angles on the same side that sum to less than two right angles, then the two lines, if extended indefinitely, meet on that side on which the angles sum to less than two right angles."
+  }
 ];
 
 const HeisigKanji = [
-  { term: "日", definition: "Sun/Day" },
-  { term: "月", definition: "Moon/Month" },
+  { term: "日", definition: "Sun / Day" },
+  { term: "月", definition: "Moon / Month" },
   { term: "火", definition: "Fire" },
   { term: "水", definition: "Water" },
-  { term: "木", definition: "Tree/Wood" },
-  { term: "金", definition: "Gold/Money" },
-  { term: "土", definition: "Earth/Soil" },
-  { term: "山", definition: "Mountain" },
+  { term: "木", definition: "Tree / Wood" },
+  { term: "金", definition: "Gold / Money" },
+  { term: "土", definition: "Earth / Soil" },
+  { term: "山", definition: "Mountain" }
 ];
 
 let data = [];
@@ -79,13 +94,36 @@ let queue = [];
 let current = null;
 let reverseMode = false;
 
+// ---------- Helpers ----------
+
 function shuffle(array) {
   return array.sort(() => Math.random() - 0.5);
 }
 
+function hideAllScreens() {
+  screens.forEach((screen) => {
+    screen.style.display = "none";
+    screen.classList.remove("active");
+  });
+}
+
+function showScreen(target) {
+  let el = typeof target === "string" ? document.getElementById(target) : target;
+  if (!el) return;
+
+  if (el.id === "study-screen") {
+    el.style.display = "flex";
+  } else {
+    el.style.display = "block";
+  }
+  el.classList.add("active");
+}
+
+// ---------- Flashcard logic ----------
+
 function loadSet(setName) {
   currentSetName = setName;
-  reverseMode = false; // default
+  reverseMode = false;
 
   switch (setName) {
     case "hebrew-alphabet":
@@ -93,7 +131,7 @@ function loadSet(setName) {
       break;
     case "geometry-postulates":
       data = GeometryPostulates;
-      reverseMode = true; // show term first
+      reverseMode = true; // show label first, statement as answer
       break;
     case "heisig-kanji":
       data = HeisigKanji;
@@ -124,27 +162,23 @@ function showNextCard() {
 
   current = queue.pop();
 
-  // Front/back text mapping
+  // Front/back content
   if (reverseMode) {
-    // Geometry: prompt is "Postulate 1", answer is the long statement
+    // Geometry: prompt = Postulate label, answer = full statement
     definition.innerHTML = `<h3>${current.term}</h3>`;
     term.innerHTML = `<h3>${current.definition}</h3>`;
   } else {
-    // Hebrew / Kanji: prompt = definition, answer = glyph
+    // Hebrew / Kanji: prompt = meaning, answer = glyph
     definition.innerHTML = `<h3>${current.definition}</h3>`;
     term.innerHTML = `<h3>${current.term}</h3>`;
   }
 
-  // === Dynamic font sizing for the ANSWER side ===
+  // Dynamic font sizing for ANSWER side
   const termH3 = term.querySelector("h3");
-
-  // Reset any previous inline styling so we don't accumulate weirdness
-  termH3.style.fontSize = "";
+  termH3.style.fontSize = ""; // reset
 
   if (currentSetName === "geometry-postulates") {
-    // Geometry → make long answers smaller based on length
     const len = termH3.textContent.length;
-
     if (len > 260) {
       termH3.style.fontSize = "0.85rem";
     } else if (len > 200) {
@@ -155,13 +189,16 @@ function showNextCard() {
       termH3.style.fontSize = "1.2rem";
     }
   } else {
-    // Hebrew / Kanji → keep answers nice and large
+    // Hebrew / Kanji answers should stay large
     termH3.style.fontSize = "3rem";
   }
 
   counterDisplay.textContent = `${currentIndex + 1} : ${total}`;
 }
 
+// ---------- Event wiring ----------
+
+// Card controls
 checkButton.addEventListener("click", () => {
   card.classList.add("flipped");
 });
@@ -170,48 +207,73 @@ nextButton.addEventListener("click", () => {
   showNextCard();
 });
 
-// Restart the **current** subject
+// Restart current deck
 restartButton.addEventListener("click", () => {
   if (currentSetName) {
     loadSet(currentSetName);
   }
 });
 
-// Theme toggle still works
+// Theme toggle
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light");
-  themeToggle.textContent = document.body.classList.contains("light")
-    ? "☀️"
-    : "🌙";
+  themeToggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 });
 
-// Category selection screen
+// Top nav links (Home / Language / Math)
+navLinks.forEach((link) => {
+  const targetId = link.dataset.target;
+  if (!targetId) return;
+
+  link.addEventListener("click", () => {
+    hideAllScreens();
+    const targetScreen = document.getElementById(targetId);
+    if (menuScreens && [...menuScreens].includes(targetScreen)) {
+      lastMenuScreen = targetScreen;
+    }
+    showScreen(targetScreen);
+
+    // Leaving study mode via nav: soft reset
+    if (targetId !== "study-screen") {
+      definition.innerHTML = "<h3>Definition</h3>";
+      term.innerHTML = "<h3>Term</h3>";
+      counterDisplay.textContent = "0 : 0";
+    }
+  });
+});
+
+// Topic cards -> start studying that set
 categoryButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const selectedSet = button.dataset.set;
-    categoryScreen.style.display = "none";
-    studyScreen.style.display = "flex"; // use flex here
+    const parentMenu = button.closest(".menu-screen");
+
+    if (parentMenu) {
+      lastMenuScreen = parentMenu;
+    }
+
+    hideAllScreens();
+    showScreen("study-screen");
     loadSet(selectedSet);
   });
 });
 
-// NOTE: we no longer call loadSet() on startup.
-// The app starts on the category screen.
-
-const backButton = document.getElementById("back-to-categories");
-const addSubjectButton = document.getElementById("add-subject");
-
+// Back to subjects
 backButton.addEventListener("click", () => {
-  // Go back to subject selection
-  studyScreen.style.display = "none";
-  categoryScreen.style.display = "block";
-  // Optional: clear card content
+  hideAllScreens();
+  showScreen(lastMenuScreen || landingScreen);
+
+  // Reset card display
   definition.innerHTML = "<h3>Definition</h3>";
   term.innerHTML = "<h3>Term</h3>";
   counterDisplay.textContent = "0 : 0";
 });
 
-// For now, just a placeholder
+// Placeholder for future subject-creation feature
 addSubjectButton.addEventListener("click", () => {
   alert("Add New Subject: feature coming soon!");
 });
+
+// Initial state: show landing screen
+hideAllScreens();
+showScreen(landingScreen);
