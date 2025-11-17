@@ -1,132 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Study Cards</title>
-  <link href="css/style.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- Top navigation bar -->
-  <header class="navbar">
-    <div class="brand">
-      <span class="brand-mark">SC</span>
-      <span class="brand-text">Retain</span>
-    </div>
-
-    <nav class="nav-links">
-      <button class="nav-link" data-target="landing-screen">Home</button>
-      <button class="nav-link" data-target="language-screen">Language</button>
-      <button class="nav-link" data-target="math-screen">Math</button>
-    </nav>
-
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-      🌙
-    </button>
-  </header>
-
-  <main class="main-layout">
-    <!-- Landing screen -->
-    <section id="landing-screen" class="screen menu-screen">
-      <section class="hero">
-        <h1>Welcome to Study Cards</h1>
-        <p> 
-          Practice languages and math concepts with simple, focused flashcards.
-          Choose a subject to get started.
-        </p>
-        <div class="hero-actions">
-          <button class="nav-link hero-link" data-target="language-screen">Retain Language</button>
-          <button class="nav-link hero-link" data-target="math-screen">Retain Math</button>
-        </div>
-      </section>
-
-      <section class="subject-overview">
-        <h2>Subjects</h2>
-        <div class="subject-grid">
-          <article class="topic-card">
-            <h3>Language</h3>
-            <p>Study Hebrew letters and foundational Japanese Kanji.</p>
-            <button class="nav-link small" data-target="language-screen">Go to Language</button>
-          </article>
-
-          <article class="topic-card">
-            <h3>Math</h3>
-            <p>Review core Euclidean geometry postulates for proof-based thinking.</p>
-            <button class="nav-link small" data-target="math-screen">Go to Math</button>
-          </article>
-        </div>
-      </section>
-    </section>
-
-    <!-- Language subject screen -->
-    <section id="language-screen" class="screen menu-screen">
-      <header class="subject-header">
-        <h2>Language</h2>
-        <p>Choose a deck to practice.</p>
-      </header>
-
-      <div class="subject-grid">
-        <article class="topic-card">
-          <h3>Hebrew Alphabet</h3>
-          <p>Learn the basic Hebrew letters and their pronunciations.</p>
-          <button class="category-btn" data-set="hebrew-alphabet">Study Hebrew</button>
-        </article>
-
-        <article class="topic-card">
-          <h3>Heisig Kanji</h3>
-          <p>Practice foundational Kanji characters with simple meanings.</p>
-          <button class="category-btn" data-set="heisig-kanji">Study Kanji</button>
-        </article>
-      </div>
-    </section>
-
-    <!-- Math subject screen -->
-    <section id="math-screen" class="screen menu-screen">
-      <header class="subject-header">
-        <h2>Math</h2>
-        <p>Choose a deck to practice.</p>
-      </header>
-
-      <div class="subject-grid">
-        <article class="topic-card">
-          <h3>Geometry Postulates</h3>
-          <p>Review key Euclidean postulates for supporting geometry proofs.</p>
-          <button class="category-btn" data-set="geometry-postulates">Study Geometry</button>
-        </article>
-      </div>
-    </section>
-
-    <!-- Study screen (flashcard view) -->
-    <section id="study-screen" class="screen">
-      <div class="card-container">
-        <div class="card" id="flashcard">
-          <div class="front">
-            <div class="definition">
-              <h3>Definition</h3>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Study Cards</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Top navigation bar -->
+        <header class="navbar">
+            <div class="brand">
+                <span class="brand-mark">SC</span>
+                <span class="brand-text">Retain</span>
             </div>
-          </div>
-          <div class="back">
-            <div class="term">
-              <h3>Term</h3>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div id="counter" class="counter">0 : 0</div>
+            <nav class="nav-links">
+                <button class="nav-link" data-target="landing-screen">
+                    Home
+                </button>
+                <button class="nav-link" data-target="language-screen">
+                    Language
+                </button>
+                <button class="nav-link" data-target="math-screen">Math</button>
+            </nav>
 
-      <div class="controls">
-        <button id="back-to-categories">⬅ Back to Subjects</button>
-        <button class="check">Show Answer</button>
-        <button class="next">Next Card</button>
-        <button class="restart">Restart</button>
-        <button id="add-subject">➕ Add New Subject</button>
-      </div>
-    </section>
-  </main>
+            <button
+                id="theme-toggle"
+                class="theme-toggle"
+                aria-label="Toggle theme"
+            >
+                🌙
+            </button>
+        </header>
 
-  <script src="js/app.js"></script>
-</body>
+        <main class="main-layout">
+            <!-- Landing screen -->
+            <section id="landing-screen" class="screen menu-screen">
+                <section class="hero panel">
+                    <h1>Welcome to Study Cards</h1>
+                    <p>
+                        Practice languages and math concepts with simple,
+                        focused flashcards. Choose a subject to get started.
+                    </p>
+                    <div class="hero-actions">
+                        <button
+                            class="nav-link hero-link"
+                            data-target="language-screen"
+                        >
+                            Retain Language
+                        </button>
+                        <button
+                            class="nav-link hero-link"
+                            data-target="math-screen"
+                        >
+                            Retain Math
+                        </button>
+                    </div>
+                </section>
+
+                <section class="subject-overview">
+                    <h2>Subjects</h2>
+                    <div class="subject-grid">
+                        <article class="topic-card panel">
+                            <h3>Language</h3>
+                            <p>
+                                Study Hebrew letters and foundational Japanese
+                                Kanji.
+                            </p>
+                            <button
+                                class="nav-link small"
+                                data-target="language-screen"
+                            >
+                                Go to Language
+                            </button>
+                        </article>
+
+                        <article class="topic-card panel">
+                            <h3>Math</h3>
+                            <p>
+                                Review core Euclidean geometry postulates for
+                                proof-based thinking.
+                            </p>
+                            <button
+                                class="nav-link small"
+                                data-target="math-screen"
+                            >
+                                Go to Math
+                            </button>
+                        </article>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Language subject screen -->
+            <section id="language-screen" class="screen menu-screen">
+                <header class="subject-header">
+                    <h2>Language</h2>
+                    <p>Choose a deck to practice.</p>
+                </header>
+
+                <div class="subject-grid">
+                    <article class="topic-card">
+                        <h3>Hebrew Alphabet</h3>
+                        <p>
+                            Learn the basic Hebrew letters and their
+                            pronunciations.
+                        </p>
+                        <button class="category-btn" data-set="hebrew-alphabet">
+                            Study Hebrew
+                        </button>
+                    </article>
+
+                    <article class="topic-card">
+                        <h3>Heisig Kanji</h3>
+                        <p>
+                            Practice foundational Kanji characters with simple
+                            meanings.
+                        </p>
+                        <button class="category-btn" data-set="heisig-kanji">
+                            Study Kanji
+                        </button>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Math subject screen -->
+            <section id="math-screen" class="screen menu-screen">
+                <header class="subject-header">
+                    <h2>Math</h2>
+                    <p>Choose a deck to practice.</p>
+                </header>
+
+                <div class="subject-grid">
+                    <article class="topic-card">
+                        <h3>Geometry Postulates</h3>
+                        <p>
+                            Review key Euclidean postulates for supporting
+                            geometry proofs.
+                        </p>
+                        <button
+                            class="category-btn"
+                            data-set="geometry-postulates"
+                        >
+                            Study Geometry
+                        </button>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Study screen (flashcard view) -->
+            <section id="study-screen" class="screen">
+                <div class="card-container">
+                    <div class="card" id="flashcard">
+                        <div class="front">
+                            <div class="definition">
+                                <h3>Definition</h3>
+                            </div>
+                        </div>
+                        <div class="back">
+                            <div class="term">
+                                <h3>Term</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="counter" class="counter">0 : 0</div>
+
+                <div class="controls">
+                    <button id="back-to-categories">⬅ Back to Subjects</button>
+                    <button class="check">Show Answer</button>
+                    <button class="next">Next Card</button>
+                    <button class="restart">Restart</button>
+                    <button id="add-subject">➕ Add New Subject</button>
+                </div>
+            </section>
+        </main>
+
+        <script src="js/app.js"></script>
+    </body>
 </html>
