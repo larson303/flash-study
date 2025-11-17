@@ -4,7 +4,7 @@
   --card-text: #1e1e1e;
   --text-color: #f0f0f0;
   --accent: #007acc;
-  --header-font: 'Lobster Two', cursive;
+  --header-font: "Lobster Two", cursive;
 }
 
 body.light {
@@ -15,28 +15,52 @@ body.light {
   --accent: #005fa3;
 }
 
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* or center if you want vertical centering */
+  min-height: calc(100vh - 80px); /* header height fudge */
+  padding: 20px 16px 40px;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #555;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #777;
+}
+
 .header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
   font-family: var(--header-font);
   color: var(--text-color);
-  margin-top: 20px;
+  margin: 20px 16px 0;
   font-size: 2rem;
-  position: relative;
 }
 
 .theme-toggle {
-  position: absolute;
-  top: 10px;
-  right: 20px;
+  margin-left: auto;
   background: transparent;
   color: var(--text-color);
   border: none;
@@ -46,9 +70,9 @@ body {
 
 .card-container {
   perspective: 1000px;
-  width: 80%;
-  max-width: 400px;
-  height: 250px;
+  width: 90%;
+  max-width: 650px;
+  height: 480px;
   margin: 40px auto 10px;
   position: relative;
 }
@@ -95,8 +119,13 @@ body {
   padding: 20px;
   font-size: 3rem;
   direction: rtl;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: "Segoe UI", Tahoma, sans-serif;
   color: #0055aa;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-height: 100%;
+  overflow-y: auto; /* Geometry answers can scroll if very long */
 }
 
 #counter {
@@ -106,30 +135,18 @@ body {
   margin-top: 5px;
 }
 
-.button {
-  text-align: center;
-  margin-top: 30px;
-}
-
-button {
-  color: white;
-  background-color: var(--accent);
-  padding: 15px 25px;
-  border: none;
-  border-radius: 10px;
-  margin: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background-color: #003f80;
-  transform: scale(1.05);
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: auto; /* pushes controls to the bottom of the flex column */
+  padding-bottom: 10px;
 }
 
 .restart {
   background-color: #444;
+  display: none; /* default hidden */
 }
 
 .restart:hover {
@@ -153,3 +170,28 @@ button:hover {
   transform: scale(1.05);
 }
 
+.selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  gap: 1rem;
+  text-align: center;
+}
+
+/* default: study screen hidden on initial load */
+/* Study screen as a flex column */
+#study-screen {
+  display: none; /* hidden by default, JS will set to flex */
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+}
+
+.counter {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #cccccc;
+}

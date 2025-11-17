@@ -1,46 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flash Card App</title>
-  <link href="css/style.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap" rel="stylesheet">
-</head>
-<body>
-  <h1 class="header">
-  This is a basic flash card learning app.
-  <button id="theme-toggle" class="theme-toggle">🌙</button>
-</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flash Card App</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1 class="header">
+      This is a basic flash card learning app.
+      <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </h1>
 
-<div id="category-screen" class="selector" style="text-align:center; margin-top: 30px;">
-  <h2>Select a subject to study:</h2>
-  <button class="category-btn" data-set="hebrew-alphabet">Hebrew Alphabet</button>
-  <button class="category-btn" data-set="geometry-postulates">Geometry Postulates</button>
-  <button class="category-btn" data-set="heisig-kanji">Heisig Kanji</button>
-</div>
+    <main class="main-layout">
+      <!-- Category selection screen -->
+      <div id="category-screen" class="selector">
+        <h2>Select a subject to study:</h2>
+        <button class="category-btn" data-set="hebrew-alphabet">
+          Hebrew Alphabet
+        </button>
+        <button class="category-btn" data-set="geometry-postulates">
+          Geometry Postulates
+        </button>
+        <button class="category-btn" data-set="heisig-kanji">
+          Heisig Kanji
+        </button>
+      </div>
 
-<div id="study-screen" style="display:none;">
-  <div class="card-container">
-    <div class="card" id="flashcard">
-      <div class="front"><div class="definition"><h3>Definition</h3></div></div>
-      <div class="back"><div class="term"><h3>Term</h3></div></div>
-    </div>
-  </div>
+      <!-- Study screen -->
+      <div id="study-screen">
+        <div class="card-container">
+          <div class="card" id="flashcard">
+            <div class="front">
+              <div class="definition">
+                <h3>Definition</h3>
+              </div>
+            </div>
+            <div class="back">
+              <div class="term">
+                <h3>Term</h3>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <div id="counter" style="text-align:center; margin-top: 10px; font-size: 1.2em;">0 : 0</div>
+        <div id="counter" class="counter">0 : 0</div>
 
-<div class="button">
-  <button id="back-to-categories">⬅ Return to Subjects</button>
-  <button class="check">Check Definition</button>
-  <button class="next">Next Definition</button>
-  <button class="restart" style="display:none;">Restart</button>
-  <button id="add-subject">➕ Add New Subject</button>
-</div>
+        <div class="controls">
+          <button id="back-to-categories">⬅ Return to Subjects</button>
+          <button class="check">Show Answer</button>
+          <button class="next">Next Card</button>
+          <button class="restart" style="display: none">Restart</button>
+          <button id="add-subject">➕ Add New Subject</button>
+        </div>
+      </div>
+    </main>
 
-
- 
-  <script src="js/app.js"></script>
-</body>
+    <script src="js/app.js"></script>
+  </body>
 </html>

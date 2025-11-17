@@ -1,19 +1,18 @@
-const card = document.getElementById('flashcard');
-const term = card.querySelector('.term');
-const definition = card.querySelector('.definition');
-const checkButton = document.querySelector('.check');
-const nextButton = document.querySelector('.next');
-const restartButton = document.querySelector('.restart');
-const counterDisplay = document.getElementById('counter');
-const themeToggle = document.getElementById('theme-toggle');
+const card = document.getElementById("flashcard");
+const term = card.querySelector(".term");
+const definition = card.querySelector(".definition");
+const checkButton = document.querySelector(".check");
+const nextButton = document.querySelector(".next");
+const restartButton = document.querySelector(".restart");
+const counterDisplay = document.getElementById("counter");
+const themeToggle = document.getElementById("theme-toggle");
 
-const categoryButtons = document.querySelectorAll('.category-btn');
-const categoryScreen = document.getElementById('category-screen');
-const studyScreen = document.getElementById('study-screen');
+const categoryButtons = document.querySelectorAll(".category-btn");
+const categoryScreen = document.getElementById("category-screen");
+const studyScreen = document.getElementById("study-screen");
 
 // NEW: track which set is currently active
 let currentSetName = null;
-
 
 const HebrewAlphabet = [
   { term: "א", definition: "Alef: silent pronunciation" },
@@ -38,15 +37,30 @@ const HebrewAlphabet = [
   { term: "ר", definition: "Resh: r sound" },
   { term: "שׂ", definition: "Sin: s sound" },
   { term: "שׁ", definition: "Shin: sh sound" },
-  { term: "ת", definition: "Taw: t sound" }
+  { term: "ת", definition: "Taw: t sound" },
 ];
 
 const GeometryPostulates = [
-  { term: "Postulate 1", definition: "A straight line segment can be drawn joining any two points." },
-  { term: "Postulate 2", definition: "Any straight line segment can be extended indefinitely in a straight line." },  
-  { term: "Postulate 3", definition: "Given any straight line segment, a circle can be drawn having the segment as radius and one endpoint as center." },
+  {
+    term: "Postulate 1",
+    definition: "A straight line segment can be drawn joining any two points.",
+  },
+  {
+    term: "Postulate 2",
+    definition:
+      "Any straight line segment can be extended indefinitely in a straight line.",
+  },
+  {
+    term: "Postulate 3",
+    definition:
+      "Given any straight line segment, a circle can be drawn having the segment as radius and one endpoint as center.",
+  },
   { term: "Postulate 4", definition: "All right angles are congruent." },
-  { term: "Postulate 5", definition: "If a line segment intersects two straight lines forming two interior angles on the same side that sum to less than two right angles, then the two lines, if extended indefinitely, meet on that side on which the angles sum to less than two right angles." }
+  {
+    term: "Postulate 5",
+    definition:
+      "If a line segment intersec...t side on which the angles sum to less than two right angles.",
+  },
 ];
 
 const HeisigKanji = [
@@ -94,7 +108,6 @@ function loadSet(setName) {
   showNextCard();
 }
 
-
 function showNextCard() {
   card.classList.remove("flipped");
 
@@ -110,44 +123,74 @@ function showNextCard() {
   }
 
   current = queue.pop();
-if (reverseMode) {
-  definition.innerHTML = `<h3>${current.term}</h3>`;
-  term.innerHTML = `<h3>${current.definition}</h3>`;
-} else {
-  definition.innerHTML = `<h3>${current.definition}</h3>`;
-  term.innerHTML = `<h3>${current.term}</h3>`;
-}
+
+  // Front/back text mapping
+  if (reverseMode) {
+    // Geometry: prompt is "Postulate 1", answer is the long statement
+    definition.innerHTML = `<h3>${current.term}</h3>`;
+    term.innerHTML = `<h3>${current.definition}</h3>`;
+  } else {
+    // Hebrew / Kanji: prompt = definition, answer = glyph
+    definition.innerHTML = `<h3>${current.definition}</h3>`;
+    term.innerHTML = `<h3>${current.term}</h3>`;
+  }
+
+  // === Dynamic font sizing for the ANSWER side ===
+  const termH3 = term.querySelector("h3");
+
+  // Reset any previous inline styling so we don't accumulate weirdness
+  termH3.style.fontSize = "";
+
+  if (currentSetName === "geometry-postulates") {
+    // Geometry → make long answers smaller based on length
+    const len = termH3.textContent.length;
+
+    if (len > 260) {
+      termH3.style.fontSize = "0.85rem";
+    } else if (len > 200) {
+      termH3.style.fontSize = "0.95rem";
+    } else if (len > 150) {
+      termH3.style.fontSize = "1.05rem";
+    } else {
+      termH3.style.fontSize = "1.2rem";
+    }
+  } else {
+    // Hebrew / Kanji → keep answers nice and large
+    termH3.style.fontSize = "3rem";
+  }
 
   counterDisplay.textContent = `${currentIndex + 1} : ${total}`;
 }
 
-checkButton.addEventListener('click', () => {
+checkButton.addEventListener("click", () => {
   card.classList.add("flipped");
 });
 
-nextButton.addEventListener('click', () => {
+nextButton.addEventListener("click", () => {
   showNextCard();
 });
 
 // Restart the **current** subject
-restartButton.addEventListener('click', () => {
+restartButton.addEventListener("click", () => {
   if (currentSetName) {
     loadSet(currentSetName);
   }
 });
 
 // Theme toggle still works
-themeToggle.addEventListener('click', () => {
+themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light");
-  themeToggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+  themeToggle.textContent = document.body.classList.contains("light")
+    ? "☀️"
+    : "🌙";
 });
 
 // Category selection screen
-categoryButtons.forEach(button => {
-  button.addEventListener('click', () => {
+categoryButtons.forEach((button) => {
+  button.addEventListener("click", () => {
     const selectedSet = button.dataset.set;
-    categoryScreen.style.display = 'none';
-    studyScreen.style.display = 'block';
+    categoryScreen.style.display = "none";
+    studyScreen.style.display = "flex"; // use flex here
     loadSet(selectedSet);
   });
 });
@@ -155,13 +198,13 @@ categoryButtons.forEach(button => {
 // NOTE: we no longer call loadSet() on startup.
 // The app starts on the category screen.
 
-const backButton = document.getElementById('back-to-categories');
-const addSubjectButton = document.getElementById('add-subject');
+const backButton = document.getElementById("back-to-categories");
+const addSubjectButton = document.getElementById("add-subject");
 
-backButton.addEventListener('click', () => {
+backButton.addEventListener("click", () => {
   // Go back to subject selection
-  studyScreen.style.display = 'none';
-  categoryScreen.style.display = 'block';
+  studyScreen.style.display = "none";
+  categoryScreen.style.display = "block";
   // Optional: clear card content
   definition.innerHTML = "<h3>Definition</h3>";
   term.innerHTML = "<h3>Term</h3>";
@@ -169,6 +212,6 @@ backButton.addEventListener('click', () => {
 });
 
 // For now, just a placeholder
-addSubjectButton.addEventListener('click', () => {
+addSubjectButton.addEventListener("click", () => {
   alert("Add New Subject: feature coming soon!");
 });
